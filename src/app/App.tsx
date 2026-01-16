@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { AddInventoryForm } from "./components/AddInventoryForm"
 import { EditInventoryForm } from "./components/EditInventoryForm"
+import Footer from "./components/Footer"
+import Head from "./components/Head"
 import { InventoryList } from "./components/InventoryList"
 import { Toaster } from "./components/ui/sonner"
 import type { ChemicalInventoryItem } from "./types/inventory"
@@ -129,34 +131,38 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {loading ? (
-        <div className="flex justify-center items-center h-screen">
-          <div className="text-xl">Loading inventory...</div>
-        </div>
-      ) : error ? (
-        <div className="flex justify-center items-center h-screen">
-          <div className="text-xl text-red-500">Error: {error}</div>
-        </div>
-      ) : currentView === "list" ? (
-        <InventoryList
-          inventory={inventory}
-          onAddNew={() => setCurrentView("add")}
-          onEditItem={handleEditItem}
-        />
-      ) : currentView === "add" ? (
-        <AddInventoryForm onAdd={handleAddInventory} onCancel={handleCancelAdd} />
-      ) : currentView === "edit" && editingItem ? (
-        <EditInventoryForm
-          item={editingItem}
-          onUpdate={handleUpdateInventory}
-          onDelete={handleDeleteInventory}
-          onCancel={handleCancelEdit}
-        />
-      ) : null}
+    <>
+      <Head />
+      <div className="min-h-screen bg-gray-50">
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <div className="text-xl">Loading inventory...</div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-screen">
+            <div className="text-xl text-red-500">Error: {error}</div>
+          </div>
+        ) : currentView === "list" ? (
+          <InventoryList
+            inventory={inventory}
+            onAddNew={() => setCurrentView("add")}
+            onEditItem={handleEditItem}
+          />
+        ) : currentView === "add" ? (
+          <AddInventoryForm onAdd={handleAddInventory} onCancel={handleCancelAdd} />
+        ) : currentView === "edit" && editingItem ? (
+          <EditInventoryForm
+            item={editingItem}
+            onUpdate={handleUpdateInventory}
+            onDelete={handleDeleteInventory}
+            onCancel={handleCancelEdit}
+          />
+        ) : null}
 
-      <Toaster />
-    </div>
+        <Toaster />
+      </div>
+      <Footer />
+    </>
   )
 }
 

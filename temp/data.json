@@ -82,5 +82,33 @@
     "notes": "",
     "dateAdded": "2026-01-16T00:38:35.872Z",
     "id": "knkgxleos"
+  },
+  {
+    "chemicalName": "test",
+    "cidNumber": "",
+    "quantity": 5,
+    "unit": "g",
+    "location": "",
+    "hazardClass": "",
+    "supplier": "",
+    "lotNumber": "",
+    "expirationDate": "",
+    "notes": "",
+    "dateAdded": "2026-01-16T18:54:46.489Z",
+    "id": "nf3lpmgnm"
+  },
+  {
+    "chemicalName": "fdsafdsafdsa",
+    "cidNumber": "",
+    "quantity": 10,
+    "unit": "g",
+    "location": "",
+    "hazardClass": "",
+    "supplier": "",
+    "lotNumber": "",
+    "expirationDate": "",
+    "notes": "",
+    "dateAdded": "2026-01-16T19:18:14.452Z",
+    "id": "katdzvtlo"
   }
 ]

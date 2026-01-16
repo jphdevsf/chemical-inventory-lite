@@ -4,7 +4,7 @@
 Chemical Inventory Lite is a lightweight web application designed to help manage chemical inventories efficiently. It provides features for tracking chemical storage, monitoring expiration dates, and simplifying inventory management tasks.
 
 ### Data Storage
-In this "Lite" version, chemical data is simply stored in `./temp/data.json`. In a future iteration, a proper database system will be introduced
+In this "Lite" version, chemical data is simply stored in `./temp/data.json`. In a future iteration, a proper database system will be introduced. For now this makes installation easy!
 
 ## Tech Stack
 | Technology       | Description                          |
@@ -17,13 +17,12 @@ In this "Lite" version, chemical data is simply stored in `./temp/data.json`. In
 | next-themes      | Theme toggle integration for React    |
 
 ## Installation
-1. Clone the repository: `git clone <repository-url>`
+1. In terminal, clone the repository: `git clone https://github.com/jphdevsf/chemical-inventory-lite`
 2. Navigate to the directory: `cd chemical-inventory-lite`
 3. Install dependencies: `npm install`
+4.
 
 ## Commands
 - `npm run build`: Build the application
 - `npm run dev`: Start development server
-- `npm run dev:vite`: Start Vite dev server
-- `npm run dev:server`: Run the server script
 - `npm run lint`: Lint the codebase

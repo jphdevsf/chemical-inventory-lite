@@ -152,7 +152,7 @@ export function InventoryList({ inventory, onAddNew, onEditItem }: InventoryList
             height="36"
             alt="molecule icon"
             className="mr-2"
-            src="./public/chem-inv-lite.svg"
+            src="./chem-inv-lite.svg"
           />
           Chemical Inventory Lite
         </h1>
