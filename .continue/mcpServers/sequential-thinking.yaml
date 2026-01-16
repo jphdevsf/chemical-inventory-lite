@@ -1,0 +1,17 @@
+name: Sequential Thinking MCP
+description: Sequential thinking MCP server configuration
+documentation_url: https://api.githubcopilot.com/mcp/
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: sequential-thinking
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-sequential-thinking"
+    env: {}
+
+# Auto Attached Rules for MCP configuration
+rule sequential-thinking-mcp-server: Use precise MCP commands for sequential thinking
+rule auto-attached-mcp-config: Maintain env consistency across all MCP servers
+rule mcp-package-versioning: Always pin MCP server package versions explicitly

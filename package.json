@@ -1,0 +1,46 @@
+{
+  "name": "@figma/my-make-file",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:vite": "vite",
+    "dev:server": "node server/index.js",
+    "lint": "npx @biomejs/biome lint"
+  },
+  "dependencies": {
+    "@radix-ui/react-alert-dialog": "1.1.6",
+    "@radix-ui/react-label": "2.1.2",
+    "@radix-ui/react-select": "2.1.6",
+    "@radix-ui/react-slot": "1.1.2",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "lucide-react": "0.487.0",
+    "next-themes": "0.4.6",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sonner": "2.0.3",
+    "tailwind-merge": "3.2.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.11",
+    "@tailwindcss/vite": "4.1.12",
+    "@types/node": "^25.0.9",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "4.7.0",
+    "concurrently": "^9.2.1",
+    "tailwindcss": "4.1.12",
+    "typescript": "^5.9.3",
+    "vite": "6.3.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "6.3.5"
+    }
+  }
+}
