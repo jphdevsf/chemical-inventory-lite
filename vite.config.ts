@@ -10,5 +10,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src")
     }
   },
-  server: { proxy: { "/data": "http://localhost:3001" } }
+  server: { proxy: { "/data": "http://localhost:3001" } },
+  base: "/"
 })

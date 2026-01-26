@@ -26,11 +26,10 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 # Redirects for SPA (React Router/Vite routing)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = true
+# [[redirects]]
+#  from = "/*"
+#  to = "/index.html"
+#  status = 200
 
 # Future: Edge functions or Neon DB plugins (add when ready)
 # [[edge_functions]]
