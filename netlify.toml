@@ -7,7 +7,7 @@
 
 # Optional: Environment vars if needed (e.g., for Neon DB later)
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
 
 # Functions for backend (server/index.js) - deploys to .netlify/functions/
 [functions]
