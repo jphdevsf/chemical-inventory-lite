@@ -1,7 +1,7 @@
 # <img src="public/chem-inv-lite.svg" width="64" height="64"> Chemical Inventory Lite
 
 ## Overview
-Chemical Inventory Lite is a lightweight web application designed to help manage chemical inventories efficiently. It provides features for tracking chemical storage, monitoring expiration dates, and simplifying inventory management tasks. [See the demo here](https://chemical-inventory-lite.netlify.app/).
+Chemical Inventory Lite is a lightweight web application designed to help manage chemical inventories efficiently. It provides features for tracking chemical storage, monitoring expiration dates, and simplifying inventory management tasks.
 
 ### Data Storage
 In this "Lite" version, chemical data is simply stored in `./temp/data.json`. In a future iteration, a proper database system will be introduced. For now this makes installation easy!
