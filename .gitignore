@@ -30,3 +30,6 @@ amplifyconfiguration*
 
 # omit folders with underscore prefix
 _*
+
+.opencode
+.continue
