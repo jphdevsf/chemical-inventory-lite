@@ -1,0 +1,26 @@
+[
+  {
+    "id": "loc-1",
+    "name": "Cabinet A, Shelf 2"
+  },
+  {
+    "id": "loc-2",
+    "name": "Acid Cabinet"
+  },
+  {
+    "id": "loc-3",
+    "name": "Flammable Storage"
+  },
+  {
+    "id": "loc-4",
+    "name": "Toxic Storage"
+  },
+  {
+    "id": "loc-5",
+    "name": "Cabinet B, Shelf 1"
+  },
+  {
+    "id": "loc-6",
+    "name": "My House"
+  }
+]

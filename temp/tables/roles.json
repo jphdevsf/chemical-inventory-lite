@@ -1,0 +1,17 @@
+[
+  {
+    "id": "role-1",
+    "name": "admin",
+    "permissions": { "canRead": true, "canCreate": true, "canUpdate": true, "canDelete": true }
+  },
+  {
+    "id": "role-2",
+    "name": "editor",
+    "permissions": { "canRead": true, "canCreate": true, "canUpdate": true, "canDelete": false }
+  },
+  {
+    "id": "role-3",
+    "name": "viewer",
+    "permissions": { "canRead": true, "canCreate": false, "canUpdate": false, "canDelete": false }
+  }
+]

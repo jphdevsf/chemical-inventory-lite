@@ -1,0 +1,58 @@
+[
+  {
+    "id": "note-1",
+    "inventoryId": "1",
+    "content": "High purity grade",
+    "updatedBy": null,
+    "updatedAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "note-2",
+    "inventoryId": "2",
+    "content": "37% concentration, handle with care",
+    "updatedBy": null,
+    "updatedAt": "2024-02-20T14:15:00Z"
+  },
+  {
+    "id": "note-3",
+    "inventoryId": "3",
+    "content": "99.9% pure, denatured",
+    "updatedBy": null,
+    "updatedAt": "2024-03-10T09:00:00Z"
+  },
+  {
+    "id": "note-4",
+    "inventoryId": "4",
+    "content": "DANGER: Known carcinogen, use in fume hood only",
+    "updatedBy": null,
+    "updatedAt": "2024-01-05T11:45:00Z"
+  },
+  {
+    "id": "note-5",
+    "inventoryId": "5",
+    "content": "HPLC grade",
+    "updatedBy": null,
+    "updatedAt": "2024-02-28T16:20:00Z"
+  },
+  {
+    "id": "note-6",
+    "inventoryId": "knkgxleos",
+    "content": "Yay it's me Jacob!",
+    "updatedBy": null,
+    "updatedAt": "2026-01-16T00:38:35.872Z"
+  },
+  {
+    "id": "note-7",
+    "inventoryId": "nf3lpmgnm",
+    "content": "Sup new note!",
+    "updatedBy": null,
+    "updatedAt": "2026-01-16T18:54:46.489Z"
+  },
+  {
+    "id": "note-8",
+    "inventoryId": "3snt7tngy",
+    "content": "This is some home-made stuff",
+    "updatedBy": null,
+    "updatedAt": "2026-01-26T20:20:13.629Z"
+  }
+]
