@@ -33,3 +33,5 @@ _*
 
 .opencode
 .continue
+# Local Netlify folder
+.netlify

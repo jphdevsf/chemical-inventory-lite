@@ -1,0 +1,53 @@
+# netlify.toml
+# Basic configuration for React/Vite project
+
+[build]
+  command = "npm run build"  # Builds to dist/ for Vite
+  publish = "dist"           # Publish the built assets from dist/
+
+# Optional: Environment vars if needed (e.g., for Neon DB later)
+[build.environment]
+  NODE_VERSION = "18"
+
+# Functions for backend (server/index.js) - deploys to .netlify/functions/
+[functions]
+  directory = "netlify/functions"  # Optional; default is netlify/functions/
+  external_node_modules = []       # For custom deps if needed
+
+# Ignore builds if no changes (default behaves based on Git)
+# [build.ignore]
+#   node_args = ["--max-old-space-size=512"]
+
+# Headers (e.g., for SPA routing)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Redirects for SPA (React Router/Vite routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
+
+# Future: Edge functions or Neon DB plugins (add when ready)
+# [[edge_functions]]
+#   path = "/api/*"
+
+# Dev settings for Netlify CLI (optional)
+[dev]
+  command = "npm run dev:server && npm run dev:vite"  # Concurrent for local
+  port = 3001  # Server port
+  targetPort = 5173  # Vite port
+  framework = "#custom"
+
+# Contexts for branches (e.g., production vs preview)
+[context.production]
+  command = "npm run build"
+  publish = "dist"
+
+[context.deploy-preview]
+  command = "npm run build"
+  publish = "dist"
