@@ -1,6 +1,5 @@
 import { ArrowLeft, Save, Trash2 } from "lucide-react"
 import { useState } from "react"
-import type { ChemicalInventoryItem } from "./../types/inventory"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,13 +10,26 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger
-} from "./ui/alert-dialog"
-import { Button } from "./ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Textarea } from "./ui/textarea"
+} from "@/app/components/elements/AlertDialog"
+import { Button } from "@/app/components/elements/Button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/app/components/elements/Card"
+import { Input } from "@/app/components/elements/Input"
+import { Label } from "@/app/components/elements/Label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/app/components/elements/Select"
+import { Textarea } from "@/app/components/elements/Textarea"
+import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
 interface EditInventoryFormProps {
   item: ChemicalInventoryItem
@@ -26,7 +38,7 @@ interface EditInventoryFormProps {
   onCancel: () => void
 }
 
-export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditInventoryFormProps) {
+const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventoryFormProps) => {
   const [formData, setFormData] = useState<ChemicalInventoryItem>(item)
 
   const handleFieldChange = (field: keyof ChemicalInventoryItem, value: string | number) => {
@@ -36,11 +48,10 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.chemicalName.trim() || !formData.quantity) {
-      alert("Chemical name and quantity are required")
+    if (!formData.chemical_name.trim() || !formData.quantity || !formData.expiration_date) {
+      alert("Chemical name, Quantity, and Expiration Date  are required")
       return
     }
-
     onUpdate(formData)
   }
 
@@ -66,30 +77,30 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
           <CardHeader>
             <CardTitle>Chemical Details</CardTitle>
             <CardDescription>
-              Added on {new Date(item.dateAdded).toLocaleDateString()}
+              Added on {new Date(item.date_added).toLocaleDateString()}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="chemicalName">
+                <Label htmlFor="chemical_name">
                   Chemical Name <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  id="chemicalName"
-                  value={formData.chemicalName}
-                  onChange={e => handleFieldChange("chemicalName", e.target.value)}
+                  id="chemical_name"
+                  value={formData.chemical_name}
+                  onChange={e => handleFieldChange("chemical_name", e.target.value)}
                   placeholder="e.g., Sodium Chloride"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cidNumber">CID Number</Label>
+                <Label htmlFor="cid_number">CID Number</Label>
                 <Input
-                  id="cidNumber"
-                  value={formData.cidNumber}
-                  onChange={e => handleFieldChange("cidNumber", e.target.value)}
+                  id="cid_number"
+                  value={formData.cid_number}
+                  onChange={e => handleFieldChange("cid_number", e.target.value)}
                   placeholder="e.g., 7647-14-5"
                 />
               </div>
@@ -140,12 +151,12 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="hazardClass">Hazard Class</Label>
+                <Label htmlFor="hazard_class">Hazard Class</Label>
                 <Select
-                  value={formData.hazardClass}
-                  onValueChange={value => handleFieldChange("hazardClass", value)}
+                  value={formData.hazard_class}
+                  onValueChange={value => handleFieldChange("hazard_class", value)}
                 >
-                  <SelectTrigger id="hazardClass">
+                  <SelectTrigger id="hazard_class">
                     <SelectValue placeholder="Select hazard class" />
                   </SelectTrigger>
                   <SelectContent>
@@ -161,32 +172,32 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="supplier">Supplier</Label>
+                <Label htmlFor="name">Supplier</Label>
                 <Input
-                  id="supplier"
-                  value={formData.supplier}
-                  onChange={e => handleFieldChange("supplier", e.target.value)}
+                  id="name"
+                  value={formData.name}
+                  onChange={e => handleFieldChange("name", e.target.value)}
                   placeholder="e.g., Sigma-Aldrich"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="lotNumber">Lot Number</Label>
+                <Label htmlFor="lot_number">Lot Number</Label>
                 <Input
-                  id="lotNumber"
-                  value={formData.lotNumber}
-                  onChange={e => handleFieldChange("lotNumber", e.target.value)}
+                  id="lot_number"
+                  value={formData.lot_number}
+                  onChange={e => handleFieldChange("lot_number", e.target.value)}
                   placeholder="e.g., LOT12345"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="expirationDate">Expiration Date</Label>
+                <Label htmlFor="expiration_date">Expiration Date</Label>
                 <Input
-                  id="expirationDate"
+                  id="expiration_date"
                   type="date"
-                  value={formData.expirationDate}
-                  onChange={e => handleFieldChange("expirationDate", e.target.value)}
+                  value={formData.expiration_date}
+                  onChange={e => handleFieldChange("expiration_date", e.target.value)}
                 />
               </div>
 
@@ -230,7 +241,7 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will permanently delete {item.chemicalName} from your inventory. This
+                    This will permanently delete {item.chemical_name} from your inventory. This
                     action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -248,3 +259,5 @@ export function EditInventoryForm({ item, onUpdate, onDelete, onCancel }: EditIn
     </div>
   )
 }
+
+export default EditInventoryForm

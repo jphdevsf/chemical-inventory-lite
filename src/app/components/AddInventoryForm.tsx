@@ -1,12 +1,24 @@
 import { Plus, Save, X } from "lucide-react"
 import { useState } from "react"
-import type { ChemicalInventoryItem } from "./../types/inventory"
-import { Button } from "./ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Textarea } from "./ui/textarea"
+import { Button } from "@/app/components/elements/Button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/app/components/elements/Card"
+import { Input } from "@/app/components/elements/Input"
+import { Label } from "@/app/components/elements/Label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/app/components/elements/Select"
+import { Textarea } from "@/app/components/elements/Textarea"
+import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
 interface AddInventoryFormProps {
   onAdd: (items: Omit<ChemicalInventoryItem, "id">[]) => void
@@ -15,33 +27,33 @@ interface AddInventoryFormProps {
 
 interface FormItem {
   tempId: string
-  chemicalName: string
-  cidNumber: string
+  chemical_name: string
+  cid_number: string
   quantity: string
   unit: string
   location: string
-  hazardClass: string
-  supplier: string
-  lotNumber: string
-  expirationDate: string
+  hazard_class: string
+  name: string
+  lot_number: string
+  expiration_date: string
   notes: string
 }
 
 const emptyFormItem = (): FormItem => ({
   tempId: Math.random().toString(36).substr(2, 9),
-  chemicalName: "",
-  cidNumber: "",
+  chemical_name: "",
+  cid_number: "",
   quantity: "",
   unit: "g",
   location: "",
-  hazardClass: "",
-  supplier: "",
-  lotNumber: "",
-  expirationDate: "",
+  hazard_class: "",
+  name: "",
+  lot_number: "",
+  expiration_date: "",
   notes: ""
 })
 
-export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
+const AddInventoryForm = ({ onAdd, onCancel }: AddInventoryFormProps) => {
   const [formItems, setFormItems] = useState<FormItem[]>([emptyFormItem()])
 
   const handleAddAnother = () => {
@@ -59,35 +71,36 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
     )
   }
 
-  async function getCID(chemicalName: string) {
-    try {
-      const response = await fetch(
-        `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemicalName}/cids/JSON`
-      )
+  // // external api loopup
+  // async function getCID(chemical_name: string) {
+  //   try {
+  //     const response = await fetch(
+  //       `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${chemical_name}/cids/JSON`
+  //     )
 
-      if (!response.ok) {
-        return "No CID found"
-      }
+  //     if (!response.ok) {
+  //       return "No CID found"
+  //     }
 
-      const data = await response.json()
+  //     const data = await response.json()
 
-      if (data.IdentifierList?.CID && data.IdentifierList.CID.length > 0) {
-        return data.IdentifierList.CID[0]
-      } else {
-        return "No CID found"
-      }
-    } catch (error) {
-      console.error("Error fetching CID:", error)
-      return "No CID found"
-    }
-  }
+  //     if (data.IdentifierList?.CID && data.IdentifierList.CID.length > 0) {
+  //       return data.IdentifierList.CID[0]
+  //     } else {
+  //       return "No CID found"
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching CID:", error)
+  //     return "No CID found"
+  //   }
+  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Validate that at least chemical name and quantity are filled
     const validItems = formItems.filter(
-      item => item.chemicalName.trim() !== "" && item.quantity.trim() !== ""
+      item => item.chemical_name.trim() !== "" && item.quantity.trim() !== ""
     )
 
     if (validItems.length === 0) {
@@ -97,20 +110,20 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
 
     const itemsToAdd = await Promise.all(
       validItems.map(async item => {
-        const CID = await getCID(item.chemicalName)
-        console.log("JPH CID:", CID)
+        // external api loopup
+        // const CID = await getCID(item.chemical_name)
         return {
-          chemicalName: item.chemicalName,
-          cidNumber: item.cidNumber,
+          chemical_name: item.chemical_name,
+          cid_number: item.cid_number,
           quantity: parseFloat(item.quantity) || 0,
           unit: item.unit,
           location: item.location,
-          hazardClass: item.hazardClass,
-          supplier: item.supplier,
-          lotNumber: item.lotNumber,
-          expirationDate: item.expirationDate,
+          hazard_class: item.hazard_class,
+          name: item.name,
+          lot_number: item.lot_number,
+          expiration_date: item.expiration_date,
           notes: item.notes,
-          dateAdded: new Date().toISOString()
+          date_added: new Date().toISOString()
         }
       })
     )
@@ -149,24 +162,26 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor={`chemicalName-${item.tempId}`}>
+                    <Label htmlFor={`chemical_name-${item.tempId}`}>
                       Chemical Name <span className="text-red-500">*</span>
                     </Label>
                     <Input
-                      id={`chemicalName-${item.tempId}`}
-                      value={item.chemicalName}
-                      onChange={e => handleFieldChange(item.tempId, "chemicalName", e.target.value)}
+                      id={`chemical_name-${item.tempId}`}
+                      value={item.chemical_name}
+                      onChange={e =>
+                        handleFieldChange(item.tempId, "chemical_name", e.target.value)
+                      }
                       placeholder="e.g., Sodium Chloride"
                       required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`cidNumber-${item.tempId}`}>CID Number</Label>
+                    <Label htmlFor={`cid_number-${item.tempId}`}>CID Number</Label>
                     <Input
-                      id={`cidNumber-${item.tempId}`}
-                      value={item.cidNumber}
-                      onChange={e => handleFieldChange(item.tempId, "cidNumber", e.target.value)}
+                      id={`cid_number-${item.tempId}`}
+                      value={item.cid_number}
+                      onChange={e => handleFieldChange(item.tempId, "cid_number", e.target.value)}
                       placeholder="e.g., 7647-14-5"
                     />
                   </div>
@@ -217,12 +232,12 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`hazardClass-${item.tempId}`}>Hazard Class</Label>
+                    <Label htmlFor={`hazard_class-${item.tempId}`}>Hazard Class</Label>
                     <Select
-                      value={item.hazardClass}
-                      onValueChange={value => handleFieldChange(item.tempId, "hazardClass", value)}
+                      value={item.hazard_class}
+                      onValueChange={value => handleFieldChange(item.tempId, "hazard_class", value)}
                     >
-                      <SelectTrigger id={`hazardClass-${item.tempId}`}>
+                      <SelectTrigger id={`hazard_class-${item.tempId}`}>
                         <SelectValue placeholder="Select hazard class" />
                       </SelectTrigger>
                       <SelectContent>
@@ -238,33 +253,33 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`supplier-${item.tempId}`}>Supplier</Label>
+                    <Label htmlFor={`name-${item.tempId}`}>Supplier</Label>
                     <Input
-                      id={`supplier-${item.tempId}`}
-                      value={item.supplier}
-                      onChange={e => handleFieldChange(item.tempId, "supplier", e.target.value)}
+                      id={`name-${item.tempId}`}
+                      value={item.name}
+                      onChange={e => handleFieldChange(item.tempId, "name", e.target.value)}
                       placeholder="e.g., Sigma-Aldrich"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`lotNumber-${item.tempId}`}>Lot Number</Label>
+                    <Label htmlFor={`lot_number-${item.tempId}`}>Lot Number</Label>
                     <Input
-                      id={`lotNumber-${item.tempId}`}
-                      value={item.lotNumber}
-                      onChange={e => handleFieldChange(item.tempId, "lotNumber", e.target.value)}
+                      id={`lot_number-${item.tempId}`}
+                      value={item.lot_number}
+                      onChange={e => handleFieldChange(item.tempId, "lot_number", e.target.value)}
                       placeholder="e.g., LOT12345"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`expirationDate-${item.tempId}`}>Expiration Date</Label>
+                    <Label htmlFor={`expiration_date-${item.tempId}`}>Expiration Date</Label>
                     <Input
-                      id={`expirationDate-${item.tempId}`}
+                      id={`expiration_date-${item.tempId}`}
                       type="date"
-                      value={item.expirationDate}
+                      value={item.expiration_date}
                       onChange={e =>
-                        handleFieldChange(item.tempId, "expirationDate", e.target.value)
+                        handleFieldChange(item.tempId, "expiration_date", e.target.value)
                       }
                     />
                   </div>
@@ -302,3 +317,5 @@ export function AddInventoryForm({ onAdd, onCancel }: AddInventoryFormProps) {
     </div>
   )
 }
+
+export default AddInventoryForm

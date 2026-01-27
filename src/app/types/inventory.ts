@@ -1,14 +1,26 @@
 export interface ChemicalInventoryItem {
   id: string;
-  chemicalName: string;
-  cidNumber: string;
   quantity: number;
   unit: string;
   location: string;
-  hazardClass: string;
-  supplier: string;
-  lotNumber: string;
-  expirationDate: string;
-  dateAdded: string;
+  lot_number: string;
+  expiration_date: string;
+  date_added: string;
   notes: string;
+  chemical_name: string;
+  cid_number: string;
+  hazard_class: string;
+  name: string;
+}
+
+
+export type SortField = keyof ChemicalInventoryItem;
+export type SortDirection = "asc" | "desc";
+
+export interface SortableTableProps<T extends Record<string, unknown>> {
+  data: T[];
+  sortField: keyof T;
+  sortDirection: SortDirection;
+  onSortChange: (field: keyof T, direction: SortDirection) => void;
+  // ...other common props
 }

@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { AddInventoryForm } from "./components/AddInventoryForm"
-import { EditInventoryForm } from "./components/EditInventoryForm"
-import Footer from "./components/Footer"
-import Head from "./components/Head"
-import { InventoryList } from "./components/InventoryList"
-import { Toaster } from "./components/ui/sonner"
-import type { ChemicalInventoryItem } from "./types/inventory"
+import AddInventoryForm from "@/app/components/AddInventoryForm"
+import EditInventoryForm from "@/app/components/EditInventoryForm"
+import { Toaster } from "@/app/components/elements/Sonner"
+import Footer from "@/app/components/layout/Footer"
+import Head from "@/app/components/layout/Head"
+import InventoryMain from "@/app/components/main/InventoryMain"
+import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
 type View = "list" | "add" | "edit"
 
 function App() {
   const [currentView, setCurrentView] = useState<View>("list")
   const [inventory, setInventory] = useState<ChemicalInventoryItem[]>([])
+  const [isFullInventoryEmpty, setIsFullInventoryEmpty] = useState<boolean>(true)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [editingItem, setEditingItem] = useState<ChemicalInventoryItem | null>(null)
@@ -28,6 +29,7 @@ function App() {
         }
         const data = await response.json()
         setInventory(data)
+        setIsFullInventoryEmpty(data.length === 0)
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Failed to fetch inventory"
         setError(errorMessage)
@@ -73,6 +75,7 @@ function App() {
       const updatedInventory = [...inventory, ...newItems]
       await saveInventory(updatedInventory)
       setInventory(updatedInventory)
+      setIsFullInventoryEmpty(updatedInventory.length === 0)
       setCurrentView("list")
       toast.success(
         `Successfully added ${newItems.length} chemical${newItems.length > 1 ? "s" : ""} to inventory`
@@ -88,9 +91,9 @@ function App() {
       const updatedInventory = inventory.map(item =>
         item.id === updatedItem.id ? updatedItem : item
       )
-
       await saveInventory(updatedInventory)
       setInventory(updatedInventory)
+      setIsFullInventoryEmpty(updatedInventory.length === 0)
       setCurrentView("list")
       setEditingItem(null)
       toast.success("Chemical updated successfully")
@@ -107,9 +110,10 @@ function App() {
 
       await saveInventory(updatedInventory)
       setInventory(updatedInventory)
+      setIsFullInventoryEmpty(updatedInventory.length === 0)
       setCurrentView("list")
       setEditingItem(null)
-      toast.success(`Deleted ${item?.chemicalName} from inventory`)
+      toast.success(`Deleted ${item?.chemical_name} from inventory`)
     } catch (err) {
       console.error(err)
       toast.error("Failed to delete chemical")
@@ -143,10 +147,11 @@ function App() {
             <div className="text-xl text-red-500">Error: {error}</div>
           </div>
         ) : currentView === "list" ? (
-          <InventoryList
+          <InventoryMain
             inventory={inventory}
             onAddNew={() => setCurrentView("add")}
             onEditItem={handleEditItem}
+            isFullInventoryEmpty={isFullInventoryEmpty}
           />
         ) : currentView === "add" ? (
           <AddInventoryForm onAdd={handleAddInventory} onCancel={handleCancelAdd} />
