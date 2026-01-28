@@ -8,6 +8,8 @@ import Head from "@/app/components/layout/Head"
 import InventoryMain from "@/app/components/main/InventoryMain"
 import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/data"
+
 type View = "list" | "add" | "edit"
 
 function App() {
@@ -23,7 +25,7 @@ function App() {
     const fetchInventory = async () => {
       try {
         setLoading(true)
-        const response = await fetch("http://localhost:3001/data")
+        const response = await fetch(API_URL)
         if (!response.ok) {
           throw new Error(`Failed to fetch inventory: ${response.statusText}`)
         }

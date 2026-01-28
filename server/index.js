@@ -11,12 +11,6 @@ const port = 3001
 app.use(express.json())
 
 app.use(cors())
-// app.use("/data", (req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*")
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-//   next()
-// })
 
 app.get("/data", getData)
 app.post("/data", postData)
