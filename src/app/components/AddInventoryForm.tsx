@@ -44,7 +44,7 @@ const emptyFormItem = (): FormItem => ({
   chemical_name: "",
   cid_number: "",
   quantity: "",
-  unit: "g",
+  unit: "",
   location: "",
   hazard_class: "",
   name: "",
@@ -100,11 +100,17 @@ const AddInventoryForm = ({ onAdd, onCancel }: AddInventoryFormProps) => {
 
     // Validate that at least chemical name and quantity are filled
     const validItems = formItems.filter(
-      item => item.chemical_name.trim() !== "" && item.quantity.trim() !== ""
+      item =>
+        item.chemical_name.trim() !== "" &&
+        item.quantity.trim() !== "" &&
+        item.unit !== "" &&
+        item.expiration_date !== ""
     )
 
     if (validItems.length === 0) {
-      alert("Please fill in at least chemical name and quantity for one item")
+      alert(
+        "Please fill in all required fields (chemical name, quantity, unit, expiration date) for at least one item"
+      )
       return
     }
 
@@ -202,13 +208,15 @@ const AddInventoryForm = ({ onAdd, onCancel }: AddInventoryFormProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`unit-${item.tempId}`}>Unit</Label>
+                    <Label htmlFor={`unit-${item.tempId}`}>
+                      Unit <span className="text-red-500">*</span>
+                    </Label>
                     <Select
                       value={item.unit}
                       onValueChange={value => handleFieldChange(item.tempId, "unit", value)}
                     >
                       <SelectTrigger id={`unit-${item.tempId}`}>
-                        <SelectValue />
+                        <SelectValue placeholder="Select a unit" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="g">g (grams)</SelectItem>
@@ -273,7 +281,9 @@ const AddInventoryForm = ({ onAdd, onCancel }: AddInventoryFormProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`expiration_date-${item.tempId}`}>Expiration Date</Label>
+                    <Label htmlFor={`expiration_date-${item.tempId}`}>
+                      Expiration Date <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                       id={`expiration_date-${item.tempId}`}
                       type="date"
@@ -281,6 +291,7 @@ const AddInventoryForm = ({ onAdd, onCancel }: AddInventoryFormProps) => {
                       onChange={e =>
                         handleFieldChange(item.tempId, "expiration_date", e.target.value)
                       }
+                      required
                     />
                   </div>
 

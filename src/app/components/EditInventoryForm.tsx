@@ -1,16 +1,5 @@
-import { ArrowLeft, Save, Trash2 } from "lucide-react"
+import { Save } from "lucide-react"
 import { useState } from "react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from "@/app/components/elements/AlertDialog"
 import { Button } from "@/app/components/elements/Button"
 import {
   Card,
@@ -19,7 +8,6 @@ import {
   CardHeader,
   CardTitle
 } from "@/app/components/elements/Card"
-import { Input } from "@/app/components/elements/Input"
 import { Label } from "@/app/components/elements/Label"
 import {
   Select,
@@ -29,6 +17,10 @@ import {
   SelectValue
 } from "@/app/components/elements/Select"
 import { Textarea } from "@/app/components/elements/Textarea"
+import { ChemicalDeleteDialog } from "@/app/components/inventory/ChemicalDeleteDialog"
+import { ChemicalFormHeader } from "@/app/components/inventory/ChemicalFormHeader"
+import { HAZARD_CLASSES, UNITS } from "@/app/components/inventory/constants"
+import { FormField } from "@/app/components/inventory/form/FormField"
 import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
 interface EditInventoryFormProps {
@@ -40,7 +32,6 @@ interface EditInventoryFormProps {
 
 const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventoryFormProps) => {
   const [formData, setFormData] = useState<ChemicalInventoryItem>(item)
-
   const handleFieldChange = (field: keyof ChemicalInventoryItem, value: string | number) => {
     setFormData({ ...formData, [field]: value })
   }
@@ -52,6 +43,7 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
       alert("Chemical name, Quantity, and Expiration Date  are required")
       return
     }
+    console.log("JPH", formData)
     onUpdate(formData)
   }
 
@@ -61,16 +53,11 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <div className="mb-6 flex items-center gap-4">
-        <Button variant="ghost" size="sm" onClick={onCancel}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to List
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl mb-1">Edit Chemical</h1>
-          <p className="text-gray-600">ID: {item.id}</p>
-        </div>
-      </div>
+      <ChemicalFormHeader
+        title={`Editing ${item.chemical_name}`}
+        subtitle={`ID: ${item.id}`}
+        onBack={onCancel}
+      />
 
       <form onSubmit={handleSubmit}>
         <Card>
@@ -82,43 +69,35 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="chemical_name">
-                  Chemical Name <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="chemical_name"
-                  value={formData.chemical_name}
-                  onChange={e => handleFieldChange("chemical_name", e.target.value)}
-                  placeholder="e.g., Sodium Chloride"
-                  required
-                />
-              </div>
+              <FormField
+                id="chemical_name"
+                label="Chemical Name"
+                value={formData.chemical_name}
+                onChange={value => handleFieldChange("chemical_name", value)}
+                placeholder="e.g., Sodium Chloride"
+                required
+                requiredMarker
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="cid_number">CID Number</Label>
-                <Input
-                  id="cid_number"
-                  value={formData.cid_number}
-                  onChange={e => handleFieldChange("cid_number", e.target.value)}
-                  placeholder="e.g., 7647-14-5"
-                />
-              </div>
+              <FormField
+                id="cid_number"
+                label="CID Number"
+                value={formData.cid_number}
+                onChange={value => handleFieldChange("cid_number", value)}
+                placeholder="e.g., 7647-14-5"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="quantity">
-                  Quantity <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="quantity"
-                  type="number"
-                  step="0.01"
-                  value={formData.quantity}
-                  onChange={e => handleFieldChange("quantity", parseFloat(e.target.value) || 0)}
-                  placeholder="0.00"
-                  required
-                />
-              </div>
+              <FormField
+                id="quantity"
+                label="Quantity"
+                value={formData.quantity}
+                onChange={value => handleFieldChange("quantity", value)}
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                required
+                requiredMarker
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="unit">Unit</Label>
@@ -130,25 +109,22 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="g">g (grams)</SelectItem>
-                    <SelectItem value="kg">kg (kilograms)</SelectItem>
-                    <SelectItem value="mg">mg (milligrams)</SelectItem>
-                    <SelectItem value="mL">mL (milliliters)</SelectItem>
-                    <SelectItem value="L">L (liters)</SelectItem>
-                    <SelectItem value="units">units</SelectItem>
+                    {UNITS.map(unit => (
+                      <SelectItem key={unit.value} value={unit.value}>
+                        {unit.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="location">Storage Location</Label>
-                <Input
-                  id="location"
-                  value={formData.location}
-                  onChange={e => handleFieldChange("location", e.target.value)}
-                  placeholder="e.g., Cabinet A, Shelf 2"
-                />
-              </div>
+              <FormField
+                id="location"
+                label="Storage Location"
+                value={formData.location}
+                onChange={value => handleFieldChange("location", value)}
+                placeholder="e.g., Cabinet A, Shelf 2"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="hazard_class">Hazard Class</Label>
@@ -160,46 +136,38 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
                     <SelectValue placeholder="Select hazard class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Non-Hazardous">Non-Hazardous</SelectItem>
-                    <SelectItem value="Flammable">Flammable</SelectItem>
-                    <SelectItem value="Corrosive">Corrosive</SelectItem>
-                    <SelectItem value="Toxic">Toxic</SelectItem>
-                    <SelectItem value="Oxidizer">Oxidizer</SelectItem>
-                    <SelectItem value="Reactive">Reactive</SelectItem>
-                    <SelectItem value="Carcinogen">Carcinogen</SelectItem>
+                    {HAZARD_CLASSES.map(hazard => (
+                      <SelectItem key={hazard.value} value={hazard.value}>
+                        {hazard.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="name">Supplier</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={e => handleFieldChange("name", e.target.value)}
-                  placeholder="e.g., Sigma-Aldrich"
-                />
-              </div>
+              <FormField
+                id="name"
+                label="Supplier"
+                value={formData.name}
+                onChange={value => handleFieldChange("name", value)}
+                placeholder="e.g., Sigma-Aldrich"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="lot_number">Lot Number</Label>
-                <Input
-                  id="lot_number"
-                  value={formData.lot_number}
-                  onChange={e => handleFieldChange("lot_number", e.target.value)}
-                  placeholder="e.g., LOT12345"
-                />
-              </div>
+              <FormField
+                id="lot_number"
+                label="Lot Number"
+                value={formData.lot_number}
+                onChange={value => handleFieldChange("lot_number", value)}
+                placeholder="e.g., LOT12345"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="expiration_date">Expiration Date</Label>
-                <Input
-                  id="expiration_date"
-                  type="date"
-                  value={formData.expiration_date}
-                  onChange={e => handleFieldChange("expiration_date", e.target.value)}
-                />
-              </div>
+              <FormField
+                id="expiration_date"
+                label="Expiration Date"
+                value={formData.expiration_date ? formData.expiration_date.split("T")[0] : ""}
+                onChange={value => handleFieldChange("expiration_date", value)}
+                type="date"
+              />
 
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="notes">Notes</Label>
@@ -230,29 +198,7 @@ const EditInventoryForm = ({ item, onUpdate, onDelete, onCancel }: EditInventory
               Cancel
             </Button>
             <div className="flex-4 hidden md:block" />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button type="button" variant="destructive">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will permanently delete {item.chemical_name} from your inventory. This
-                    action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <ChemicalDeleteDialog chemicalName={item.chemical_name} onDelete={handleDelete} />
           </div>
         </div>
       </form>

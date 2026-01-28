@@ -29,10 +29,10 @@ const InventoryMain = ({
   const filteredAndSortedInventory = useMemo(() => {
     const filtered = inventory.filter(item => {
       const matchesSearch =
-        item.chemical_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.cid_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.lot_number.toLowerCase().includes(searchTerm.toLowerCase())
+        item.chemical_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.cid_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.lot_number?.toLowerCase().includes(searchTerm.toLowerCase())
 
       const matchesHazard = hazardFilter === "all" || item.hazard_class === hazardFilter
       const matchesLocation = locationFilter === "all" || item.location === locationFilter
@@ -50,6 +50,9 @@ const InventoryMain = ({
         aValue = aValue.toLowerCase()
         bValue = bValue.toLowerCase()
       }
+
+      if (aValue === undefined || aValue === null) return 1
+      if (bValue === undefined || bValue === null) return -1
 
       if (aValue < bValue) return sortDirection === "asc" ? -1 : 1
       if (aValue > bValue) return sortDirection === "asc" ? 1 : -1

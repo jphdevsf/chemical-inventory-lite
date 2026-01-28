@@ -42,7 +42,7 @@ function App() {
     fetchInventory()
   }, [])
 
-  // Save inventory data to the server
+  // Save inventory data to the server (for new items)
   const saveInventory = async (updatedInventory: ChemicalInventoryItem[]) => {
     try {
       const response = await fetch("http://localhost:3001/data", {
@@ -65,21 +65,48 @@ function App() {
     }
   }
 
+  // Update inventory item on the server
+  const updateInventoryItem = async (item: ChemicalInventoryItem) => {
+    try {
+      const response = await fetch("http://localhost:3001/data", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(item)
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to update inventory: ${response.statusText}`)
+      }
+
+      return await response.json()
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to update inventory"
+      toast.error(errorMessage)
+      throw err
+    }
+  }
+
   const handleAddInventory = async (items: Omit<ChemicalInventoryItem, "id">[]) => {
     try {
-      const newItems = items.map(item => ({
-        ...item,
-        id: Math.random().toString(36).substr(2, 9)
-      }))
+      const response = await saveInventory(items as ChemicalInventoryItem[])
 
-      const updatedInventory = [...inventory, ...newItems]
-      await saveInventory(updatedInventory)
-      setInventory(updatedInventory)
-      setIsFullInventoryEmpty(updatedInventory.length === 0)
+      const newItems = response.data
+
+      setInventory([...inventory, ...newItems])
+      setIsFullInventoryEmpty(false)
       setCurrentView("list")
-      toast.success(
-        `Successfully added ${newItems.length} chemical${newItems.length > 1 ? "s" : ""} to inventory`
-      )
+
+      if (response.errors && response.errors.length > 0) {
+        toast.error(
+          `Added ${newItems.length} chemical${newItems.length > 1 ? "s" : ""}, but ${response.errors.length} failed`
+        )
+      } else {
+        toast.success(
+          `Successfully added ${newItems.length} chemical${newItems.length > 1 ? "s" : ""} to inventory`
+        )
+      }
     } catch (err) {
       console.error(err)
       toast.error("Failed to add chemicals to inventory")
@@ -91,7 +118,7 @@ function App() {
       const updatedInventory = inventory.map(item =>
         item.id === updatedItem.id ? updatedItem : item
       )
-      await saveInventory(updatedInventory)
+      await updateInventoryItem(updatedItem)
       setInventory(updatedInventory)
       setIsFullInventoryEmpty(updatedInventory.length === 0)
       setCurrentView("list")
@@ -106,11 +133,21 @@ function App() {
   const handleDeleteInventory = async (id: string) => {
     try {
       const item = inventory.find(i => i.id === id)
-      const updatedInventory = inventory.filter(item => item.id !== id)
 
-      await saveInventory(updatedInventory)
-      setInventory(updatedInventory)
-      setIsFullInventoryEmpty(updatedInventory.length === 0)
+      const response = await fetch("http://localhost:3001/data", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete inventory: ${response.statusText}`)
+      }
+
+      setInventory(inventory.filter(item => item.id !== id))
+      setIsFullInventoryEmpty(inventory.length === 1)
       setCurrentView("list")
       setEditingItem(null)
       toast.success(`Deleted ${item?.chemical_name} from inventory`)
