@@ -6,14 +6,13 @@ import { getData } from "../../server/routes/getData.js"
 import { postData } from "../../server/routes/postData.js"
 import { updateData } from "../../server/routes/updateData.js"
 
-const app = express()
+const api = express()
 
-app.use(express.json())
-app.use(cors())
+api.use(express.json())
+api.use(cors())
+api.get("/data", getData)
+api.post("/data", postData)
+api.put("/data", updateData)
+api.delete("/data", deleteData)
 
-app.get("/data", getData)
-app.post("/data", postData)
-app.put("/data", updateData)
-app.delete("/data", deleteData)
-
-export const handler = serverless(app)
+export const handler = serverless(api)
