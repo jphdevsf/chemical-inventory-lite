@@ -77,7 +77,20 @@ export const postData = async (req, res) => {
         )
 
         await client.query("COMMIT")
-        results.push(inventoryResult.rows[0])
+
+        // Fetch complete data with joins (matching GET endpoint structure)
+        const fullDataResult = await client.query(
+          `
+          SELECT inventory.id, quantity, unit, location, lot_number, expiration_date, date_added, notes, chemical_name, cid_number, hazard_class, suppliers.name
+          FROM inventory
+          INNER JOIN chemicals ON inventory.chemical_id = chemicals.id
+          INNER JOIN suppliers ON inventory.supplier_id = suppliers.id
+          WHERE inventory.id = $1
+        `,
+          [inventoryResult.rows[0].id]
+        )
+
+        results.push(fullDataResult.rows[0])
         console.log("Successfully inserted inventory item")
       } catch (err) {
         console.error("Error in transaction:", err.message, err.detail)
