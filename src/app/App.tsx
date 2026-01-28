@@ -88,9 +88,9 @@ function App() {
     }
   }
 
-  const handleAddInventory = async (items: Omit<ChemicalInventoryItem, "id">[]) => {
+  const handleAddInventory = async (items: ChemicalInventoryItem[]) => {
     try {
-      const response = await saveInventory(items as ChemicalInventoryItem[])
+      const response = await saveInventory(items)
 
       const newItems = response.data
 
