@@ -1,6 +1,9 @@
 import { neonConfig } from "@neondatabase/serverless"
+import dotenv from "dotenv"
 import pkg from "pg"
 import ws from "ws"
+
+dotenv.config()
 
 neonConfig.webSocketConstructor = ws
 
