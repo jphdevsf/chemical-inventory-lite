@@ -28,7 +28,7 @@ This application uses **Neon PostgreSQL** for persistent data storage with a nor
 - `user_role_assignments` - Mapping users to roles for access control
 
 **Database Schema Overview:**
-![Database Schema](./docs/database-schema.png)
+![Database Schema](/docs/database-schema.png)
 
 **Relationships:**
 - Each `inventory` item references one `chemical` and one `supplier`
