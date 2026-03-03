@@ -1,0 +1,85 @@
+erDiagram    chemicals {
+        uuid id PK
+        varchar chemical_name
+        varchar cid_number
+        varchar cas_number
+        varchar molecular_formula
+        varchar hazard_class
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+
+    suppliers {
+        uuid id PK
+        varchar name
+        varchar contact_email
+        varchar contact_phone
+        text address
+        varchar website
+        timestamp created_at
+        timestamp updated_at
+    }
+
+
+    users {
+        uuid id PK
+        varchar email
+        varchar password_hash
+        varchar name
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+
+    user_roles {
+        uuid id PK
+        enum name
+        text description
+        timestamp created_at
+    }
+
+
+    user_role_assignments {
+        uuid id PK
+        uuid user_id FK
+        uuid role_id FK
+        uuid assigned_by FK
+        timestamp assigned_at
+    }
+
+
+    inventory {
+        text id PK
+        uuid chemical_id FK
+        uuid supplier_id FK
+        numeric quantity
+        varchar unit
+        varchar location
+        varchar lot_number
+        date expiration_date
+        timestamp date_added
+        text notes
+        uuid created_by FK
+        uuid updated_by FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+
+    rate_limits {
+        varchar ip PK
+        int request_count
+        timestamp window_start
+    }
+
+
+    chemicals ||--o{ inventory : chemical_id
+    suppliers ||--o{ inventory : supplier_id
+    users ||--o{ inventory : created_by
+    users ||--o{ inventory : updated_by
+    users ||--|{ user_role_assignments : user_id
+    user_roles ||--|{ user_role_assignments : role_id
+    users ||--o{ user_role_assignments : assigned_by
