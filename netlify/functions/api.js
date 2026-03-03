@@ -1,6 +1,7 @@
 import cors from "cors"
 import express from "express"
 import serverless from "serverless-http"
+import { dbRateLimiter } from "../../server/middleware/rateLimiter.js"
 import { deleteData } from "../../server/routes/deleteData.js"
 import { getData } from "../../server/routes/getData.js"
 import { postData } from "../../server/routes/postData.js"
@@ -10,6 +11,7 @@ const api = express()
 
 api.use(express.json())
 api.use(cors())
+api.use(dbRateLimiter)
 api.get("/data", getData)
 api.post("/data", postData)
 api.put("/data", updateData)

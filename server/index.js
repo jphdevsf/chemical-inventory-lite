@@ -1,5 +1,6 @@
 import cors from "cors"
 import express from "express"
+import { dbRateLimiter } from "./middleware/rateLimiter.js"
 import { deleteData } from "./routes/deleteData.js"
 import { getData } from "./routes/getData.js"
 import { postData } from "./routes/postData.js"
@@ -11,6 +12,8 @@ const port = 3001
 app.use(express.json())
 
 app.use(cors())
+
+app.use(dbRateLimiter)
 
 app.get("/data", getData)
 app.post("/data", postData)

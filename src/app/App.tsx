@@ -28,7 +28,8 @@ function App() {
         setLoading(true)
         const response = await fetch(API_URL)
         if (!response.ok) {
-          throw new Error(`Failed to fetch inventory: ${response.statusText}`)
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error || `Failed to fetch inventory: ${response.statusText}`)
         }
         const data = await response.json()
         setInventory(data)
@@ -57,7 +58,8 @@ function App() {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to save inventory: ${response.statusText}`)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Failed to save inventory: ${response.statusText}`)
       }
 
       return await response.json()
@@ -80,7 +82,8 @@ function App() {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to update inventory: ${response.statusText}`)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Failed to update inventory: ${response.statusText}`)
       }
 
       return await response.json()
@@ -146,7 +149,8 @@ function App() {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to delete inventory: ${response.statusText}`)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Failed to delete inventory: ${response.statusText}`)
       }
 
       setInventory(inventory.filter(item => item.id !== id))

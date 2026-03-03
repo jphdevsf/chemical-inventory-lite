@@ -15,12 +15,15 @@ Chemical Inventory Lite is a lightweight web application designed to help manage
 | next-themes      | Theme toggle integration for React    |
 
 ### Data Storage
-This application uses **Neon PostgreSQL** for persistent data storage with a normalized relational schema across six tables:
+This application uses **Neon PostgreSQL** for persistent data storage with a normalized relational schema across seven tables:
 
 **Core Tables (Active):**
 - `chemicals` - Chemical compound information (name, CAS number, hazard class, molecular formula)
 - `suppliers` - Supplier contact details (name, email, phone, address, website)
 - `inventory` - Inventory items linking chemicals and suppliers with quantities, locations, and tracking
+
+**Rate Limiting (Active):**
+- `rate_limits` - IP-based request tracking with SHA-256 hashed addresses for privacy protection
 
 **Authentication Tables (Future Use):**
 - `users` - User accounts with email, password hash, and activation status
@@ -43,14 +46,23 @@ The database connection is configured via environment variables for security and
 2. Navigate to the directory: `cd chemical-inventory-lite`
 3. Install dependencies: `npm install`
 4. Create a `.env` file in the root directory with:
-   ```
-   VITE_API_URL=/data
-   DATABASE_URL=[neon db url]
-   DEFAULT_USER_ID=[some id, arbitrary for now]
-   ```
-   Replace `your_neon_database_url` with your actual Neon connection string from the Neon dashboard.
+    ```
+    VITE_API_URL=/data
+    DATABASE_URL=[neon db url]
+    DEFAULT_USER_ID=[some id, arbitrary for now]
+    RATE_LIMIT_SALT=[generate a random secret string]
+    ```
+    Replace `[neon db url]` with your actual Neon connection string from the Neon dashboard.
+    Replace `[generate a random secret string]` with a strong, random string for rate limiting IP hashing (e.g., use: `openssl rand -base64 32`).
+
+ 5. Initialize the database schema:
+    ```bash
+    psql $DATABASE_URL -f server/db-setup/init-database.sql
+    ```
+    This creates all required tables (`chemicals`, `suppliers`, `inventory`, `users`, `user_roles`, `user_role_assignments`, `rate_limits`) with indexes and foreign keys.
 
 ## Commands
 - `npm run build`: Build the application
 - `npm run dev`: Start development server
 - `npm run lint`: Lint the codebase
+
