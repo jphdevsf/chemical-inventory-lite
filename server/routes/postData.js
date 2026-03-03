@@ -61,7 +61,7 @@ export const postData = async (req, res) => {
         const inventoryResult = await client.query(
           `INSERT INTO inventory
            (id, chemical_id, supplier_id, quantity, unit, location, lot_number, expiration_date, date_added, notes, created_by, updated_by)
-           VALUES (gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, 'f2b26b25-be58-442c-a457-87dbad7c8843', 'f2b26b25-be58-442c-a457-87dbad7c8843')
+           VALUES (gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
            RETURNING *`,
           [
             chemical_id,
@@ -72,7 +72,9 @@ export const postData = async (req, res) => {
             item.lot_number,
             item.expiration_date,
             item.date_added,
-            item.notes
+            item.notes,
+            process.env.DEFAULT_USER_ID,
+            process.env.DEFAULT_USER_ID
           ]
         )
 

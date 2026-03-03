@@ -8,6 +8,7 @@ import Head from "@/app/components/layout/Head"
 import InventoryMain from "@/app/components/main/InventoryMain"
 import type { ChemicalInventoryItem } from "@/app/types/inventory"
 
+// API_URL
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/data"
 
 type View = "list" | "add" | "edit"
@@ -47,7 +48,7 @@ function App() {
   // Save inventory data to the server (for new items)
   const saveInventory = async (updatedInventory: ChemicalInventoryItem[]) => {
     try {
-      const response = await fetch("http://localhost:3001/data", {
+      const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -70,7 +71,7 @@ function App() {
   // Update inventory item on the server
   const updateInventoryItem = async (item: ChemicalInventoryItem) => {
     try {
-      const response = await fetch("http://localhost:3001/data", {
+      const response = await fetch(API_URL, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -136,7 +137,7 @@ function App() {
     try {
       const item = inventory.find(i => i.id === id)
 
-      const response = await fetch("http://localhost:3001/data", {
+      const response = await fetch(API_URL, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
